@@ -1,0 +1,209 @@
+==외부파일:읽기전용
+https://www.naver.com/robots.txt
+https://www.bobaedream.co.kr/robots.txt
+--d:\study\oracle\product.csv
+1)디렉토리생성
+create directory 디렉토리명 as 경로;
+create directory source as 'D:\study\oracle';  --X
+conn system/1234
+grant dba to tom;   --권한부여
+--if)디렉토리삭제
+--drop directory source; 
+2)테이블 생성
+create table product_ext(
+	no number,
+	irum varchar2(20),
+	maker varchar2(20),
+	price number
+)
+organization external(
+	type oracle_loader
+	default directory source
+	location('product.csv')
+);
+3)조회
+select * from product_ext;
+--수연씨,희수씨만
+product.csv 수정
+drop table product_ext;
+create table product_ext(
+	no number,
+	irum varchar2(20),
+	maker varchar2(20),
+	price number
+)
+organization external(
+	type oracle_loader
+	default directory source
+	location('product.csv')
+);
+select * from product_ext;
+-------------------------------------
+4)데이터 입력
+insert into product_ext values (60,'건조기','LG',1500000); --X
+4-1)일반테이블로 변경
+create table product
+	as
+	select * from product_ext;
+alter table product
+	add constraint product_no_p primary key(no);
+alter table product
+	add constraint product_price_c check (price>=10000);
+alter table product
+	modify (irum varchar2(20) constraint product_irum_n not null);
+insert into product values (60,'건조기','LG',1500000);	
+select * from product;
+4-2)외부테이블 삭제
+drop table product_ext;
+--시퀀스--------------------------
+select * from tab;
+create table fruit(
+	fno number constraint fruit_fno_p primary key,
+	fname varchar2(20),
+	price number
+);
+create table member(
+	mno number constraint member_mno_p primary key,
+	mname varchar2(20),
+	hp varchar2(20)
+);
+create sequence 시퀀스명
+	[옵션들];
+create sequence fruit_seq;
+create sequence member_seq
+	increment by 10
+	start with 10;
+select * from tab;
+select table_name from dictionary 
+	 it values (fruit_seq.nextval, '포도',2000)	;
+insert into fruit values (fruit_seq.nextval, '복숭아',2000);
+select * from fruit;
+insert into member values (member_seq.nextval,'호동이','111');
+insert into member values (member_seq.nextval,'포동이','111');
+select * from member;
+insert into fruit values (fruit_seq.nextval, '수박',20000);
+select * from fruit;
+select fruit_seq.currval,member_seq.currval from dual;
+rollback;
+select * from fruit;
+select * from member;
+insert into fruit values (fruit_seq.nextval,'짭짜리',1000);
+insert into fruit values (fruit_seq.nextval,'사과',1000);
+select * from fruit;
+-- dba 권한 제거 
+conn system/1234
+revoke dba from tom;
+conn tom/jerry
+==뷰:가상의 테이블, 쿼리만 저장
+    사용의 편의성
+	보안
+@D:\study\oracle\data.txt
+--번호,이름,수능,내신,면접,실기,학과명
+select st.bunho,irum,s1,s2,s3,s4,partname
+	from student st,score sc,tech t,part p
+	where st.bunho=sc.bunho and st.bunho=t.bunho
+		and st.partcd=p.partcd;
+--뷰의 생성 및 수정
+create [or replace] view 뷰이름
+	as select 절
+	[옵션들]
+create or replace view haksa
+	as
+	select st.bunho,irum,s1,s2,s3,s4,partname
+		from student st,score sc,tech t,part p
+		where st.bunho=sc.bunho and st.bunho=t.bunho
+			and st.partcd=p.partcd;   --권한부족
+--권한부여
+conn system/1234
+grant dba to tom;
+conn tom/jerry
+create or replace view haksa
+	as
+	select st.bunho,irum,s1,s2,s3,s4,partname
+		from student st,score sc,tech t,part p
+		where st.bunho=sc.bunho and st.bunho=t.bunho
+			and st.partcd=p.partcd; 
+select * from haksa;
+create or replace view haksa
+	as
+	select st.bunho,irum,s1,s2,s3,s4,s1+s2+s3+s4 hap, partname
+		from student st,score sc,tech t,part p
+		where st.bunho=sc.bunho and st.bunho=t.bunho
+			and st.partcd=p.partcd; 
+drop view haksa;
+desc sawon;
+create view insa
+	as
+	select sabun,saname,sajob,sahire from sawon;
+select * from insa;
+update insa set sajob='팀장';
+select * from insa;
+select * from sawon;
+create view insa2
+	as
+	select sabun,saname,sajob from sawon
+	with read only;
+select * from insa2;
+update insa2 set sajob='부장';
+create or replace view insa10
+	as
+	select sabun,saname,sajob,deptno from sawon
+		where deptno=10;
+select * from insa10;
+insert into insa10 values (91,'둘리','과장',10);
+insert into insa10 values (92,'고길동','사원',10);
+select * from insa10;
+select * from sawon;
+insert into insa10 values (93,'희동이','사원',20);
+select * from insa10;
+select * from sawon;
+--with check option
+create or replace view insa20
+	as
+	select sabun,saname,sajob,deptno from sawon
+		where deptno=20
+		with check option;
+insert into insa20 values (81,'심청','사원',20);
+insert into insa20 values (82,'심학규','사원',30);
+--현재 사용자의 뷰 조회
+desc dictionary
+select table_name from dictionary where table_name like '%VIEW%';
+desc user_views
+select VIEW_NAME,TEXT from user_views;
+desc user_objects
+select object_name,OBJECT_TYPE from user_objects;
+col OBJECT_NAME format a30
+col OBJECT_type format a30
+/
+--index:기본키와 유니크 제약에 자동생성
+alter table member
+	drop constraint member_mno_p;
+alter table fruit
+	drop primary key;
+select object_name,OBJECT_TYPE from user_objects;	
+--create index 인덱스명
+	on 테이블명(컬럼명);
+create index i_sawon_sapay
+	on sawon(sapay);
+select * from sawon where sapay>2000;
+drop index i_sawon_sapay;
+create index i_sawon_saname
+	on sawon(upper(saname));
+
+----------------------------
+select table_name from dictionary 
+	where table_name like '%PRIV%';
+	
+
+
+
+
+
+
+
+
+
+
+
+
+

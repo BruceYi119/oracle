@@ -1,0 +1,33 @@
+orders_ono_p
+orders_cid_f
+orders_product_ono_oseq
+orders_product_ono_f
+orders_product_pno_f
+order_product_ono_oseq_p
+---
+conn system/1234
+grant connect,resource to uu1;
+alter database
+	datafile 'd:\study\db\red.dbf' resize 20m;
+----------->	UU1사용자에게 테이블 생성하세요
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+

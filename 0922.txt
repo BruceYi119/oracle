@@ -1,0 +1,161 @@
+--glogin.sql
+db>테이블스페이스(system,undo,temp,.....)>세그먼트(테이블,인덱스,뷰,.)>익스턴트>블럭
+==테이블스페이스 생성
+conn system/1234
+create tablespace 테이블스페이스명
+	datafile '경로및파일명' size 크기 [,
+			 '경로및파일명' size 크기,
+			 ...]
+create tablespace spring
+	datafile 'D:\study\db\spring1.dbf' size 4m,
+			 'D:\study\db\spring2.dbf' size 4m;	
+desc dba_data_files;
+select TABLESPACE_NAME,FILE_NAME,BYTES from dba_data_files;
+create tablespace winter
+	datafile 'd:\study\db\winter.dbf' size 10m;
+create tablespace summer
+	datafile 'd:\study\db\summer.dbf' size 4m;	
+==테이블스페이스 수정
+1)데이터파일 추가
+alter tablespace spring
+	add datafile 'D:\study\db\spring3.dbf' size 4m;	
+select TABLESPACE_NAME,FILE_NAME,BYTES from dba_data_files;
+col TABLESPACE_NAME format a30
+col file_NAME format a50
+select TABLESPACE_NAME,FILE_NAME,BYTES from dba_data_files
+	order by TABLESPACE_NAME;	
+2)데이터 파일의 크기 조정
+alter database 
+	datafile 'd:\study\db\winter.dbf' resize 20m;
+select TABLESPACE_NAME,FILE_NAME,BYTES from dba_data_files
+	order by TABLESPACE_NAME;		
+3)데이터 파일을 자동증가로 변경
+alter database
+	datafile 'd:\study\db\summer.dbf'
+		autoextend on next 2m maxsize 10m;
+--
+create user tom      --사용자생성
+	identified by jerry
+	default tablespace summer;
+grant connect,resource to tom;    --권한부여
+conn tom/jerry                    --사용자접속
+select * from tab;
+create table test1(
+no number,
+irum varchar2(10),
+day date
+);
+select * from tab;
+insert into test1 values (1,'park',sysdate);
+select * from test1;
+begin
+	for i in 1..100000 loop
+		insert into test1 values (i,'kim',sysdate );
+	end loop;
+end;
+/	
+commit;
+begin
+	for i in 1..1000000 loop
+		insert into test1 values (i,'kim',sysdate );
+	end loop;
+end;
+/	
+commit;
+==테이블스페이스 삭제	
+conn system/1234
+drop tablespace spring;   --데이터 파일 남음
+drop tablespace summer;    --X
+drop tablespace summer
+	INCLUDING CONTENTS;   --데이터 파일 남음	
+drop tablespace winter
+	INCLUDING CONTENTS and datafiles;	
+drop tablespace autumn
+	INCLUDING CONTENTS and datafiles;	
+--테이블스페이스 이동
+create tablespace autumn
+	datafile 'd:\study\db\autumn.dbf' size 10m;
+create tablespace winter
+	datafile 'd:\study\db\winter.dbf' size 10m;
+desc dba_users
+select USERNAME,DEFAULT_TABLESPACE from dba_users;
+--해피사용자는 autumn, 톰사용자는 winter 테이블스페이스를 사용하도록 설정
+alter user tom
+	default tablespace winter;
+alter user happy
+	default tablespace autumn;	
+select USERNAME,DEFAULT_TABLESPACE from dba_users;	
+-------------------------------------------
+conn happy/day
+@d:\study\oracle\data.txt
+select * from tab;
+--테이블이 저장된 테이블스페이스 확인
+desc user_tables
+select TABLE_NAME,TABLESPACE_NAME from user_tables;
+create table test1(
+	a number,
+	b varchar2(10),
+	d date)
+	tablespace winter;
+select TABLE_NAME,TABLESPACE_NAME from user_tables;	
+conn system/1234			 
+select TABLESPACE_NAME,FILE_NAME,BYTES from dba_data_files
+	order by TABLESPACE_NAME;
+--D:\STUDY\DB\AUTUMN.DBF 을 D:\down\AUTUMN.DBF 로 이동
+1)테이블스페이스의 상태변경
+alter tablespace autumn offline;
+2)데이터파일 이동
+D:\STUDY\DB\AUTUMN.DBF 을 D:\down\AUTUMN.DBF 로 이동
+3)데이터파일의 위치를 오라클에게 정보변경
+alter tablespace autumn
+	rename datafile 'D:\STUDY\DB\AUTUMN.DBF' to 
+					'D:\down\AUTUMN.DBF';
+4)테이블스페이스의 상태변경
+alter tablespace autumn online;
+conn happy/day
+select * from personnel;
+실습) D:\down\AUTUMN.DBF을  D:\STUDY\DB\AUTUMN.DBF로 이동
+==
+conn happy/day
+desc personnel;
+create table t1(
+a number,
+b number(5),
+c number(5,2)
+);
+insert into t1 values (10/7,10/7,10/7);
+insert into t1 values (1000/7,1000/7,1000/7);
+select * from t1;
+insert into t1 values (10000/7,10000/7,10000/7);
+select * from t1;
+create table t2(
+a date,
+b timestamp,
+c timestamp(0),
+d timestamp(9)
+);
+insert into t2 values (sysdate,sysdate,sysdate,sysdate);
+select * from t2;
+create table t3(
+a varchar2(10),
+b char(10)
+);
+insert into t3 values ('aa','aa');
+select * from t3;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

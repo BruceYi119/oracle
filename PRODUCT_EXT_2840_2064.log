@@ -1,0 +1,184 @@
+
+
+ LOG file opened at 09/25/20 09:39:46
+
+Field Definitions for table PRODUCT_EXT
+  Record format DELIMITED BY NEWLINE
+  Data in file has same endianness as the platform
+  Rows with all null fields are accepted
+
+  Fields in Data Source: 
+
+    NO                              CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    IRUM                            CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    MAKER                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    PRICE                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+
+
+ LOG file opened at 09/25/20 09:39:59
+
+Field Definitions for table PRODUCT_EXT
+  Record format DELIMITED BY NEWLINE
+  Data in file has same endianness as the platform
+  Rows with all null fields are accepted
+
+  Fields in Data Source: 
+
+    NO                              CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    IRUM                            CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    MAKER                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    PRICE                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+
+
+ LOG file opened at 09/25/20 09:41:45
+
+Field Definitions for table PRODUCT_EXT
+  Record format DELIMITED BY NEWLINE
+  Data in file has same endianness as the platform
+  Rows with all null fields are accepted
+
+  Fields in Data Source: 
+
+    NO                              CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    IRUM                            CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    MAKER                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    PRICE                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+
+
+ LOG file opened at 09/25/20 09:41:55
+
+Field Definitions for table PRODUCT_EXT
+  Record format DELIMITED BY NEWLINE
+  Data in file has same endianness as the platform
+  Rows with all null fields are accepted
+
+  Fields in Data Source: 
+
+    NO                              CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    IRUM                            CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    MAKER                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    PRICE                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+
+
+ LOG file opened at 09/25/20 09:47:07
+
+Field Definitions for table PRODUCT_EXT
+  Record format DELIMITED BY NEWLINE
+  Data in file has same endianness as the platform
+  Rows with all null fields are accepted
+
+  Fields in Data Source: 
+
+    NO                              CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    IRUM                            CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    MAKER                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    PRICE                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+
+
+ LOG file opened at 09/25/20 10:01:26
+
+Field Definitions for table PRODUCT_EXT
+  Record format DELIMITED BY NEWLINE
+  Data in file has same endianness as the platform
+  Rows with all null fields are accepted
+
+  Fields in Data Source: 
+
+    NO                              CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    IRUM                            CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    MAKER                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    PRICE                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+
+
+ LOG file opened at 09/25/20 10:01:38
+
+Field Definitions for table PRODUCT_EXT
+  Record format DELIMITED BY NEWLINE
+  Data in file has same endianness as the platform
+  Rows with all null fields are accepted
+
+  Fields in Data Source: 
+
+    NO                              CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    IRUM                            CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    MAKER                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    PRICE                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+
+
+ LOG file opened at 09/25/20 10:02:08
+
+Field Definitions for table PRODUCT_EXT
+  Record format DELIMITED BY NEWLINE
+  Data in file has same endianness as the platform
+  Rows with all null fields are accepted
+
+  Fields in Data Source: 
+
+    NO                              CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    IRUM                            CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    MAKER                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader
+    PRICE                           CHAR (255)
+      Terminated by ","
+      Trim whitespace same as SQL Loader

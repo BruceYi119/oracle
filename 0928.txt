@@ -1,0 +1,175 @@
+식별관계-공통컬럼 두개다 기본키인 경우
+비식별관계-공통컬럼중 하나는 기본키, 나머지는 일반컬럼인 경우
+ojdbc6.jar
+jdbc드라이버 D:\study\oracle\ojdbc6.jar
+URL       
+--프로파일
+conn system/1234
+select * from dba_profiles;
+col PROFILE format a15
+col RESOURCE_NAME format a30
+col LIMIT format a20
+/
+create profile 프로파일명 limit
+	내용들;
+--프로파일 생성
+create profile pro1 limit
+	SESSIONS_PER_USER 3
+	IDLE_TIME 10
+	CONNECT_TIME 10
+	FAILED_LOGIN_ATTEMPTS 3
+	PASSWORD_LIFE_TIME 5;
+select * from dba_profiles order by PROFILE;	
+--사용자 적용
+desc dba_users;
+select USERNAME,DEFAULT_TABLESPACE,PROFILE  from dba_users;
+alter user tom
+	profile pro1;
+select USERNAME,DEFAULT_TABLESPACE,PROFILE  from dba_users;	
+conn tom/jj
+conn tom/jj
+conn tom/jj
+conn tom/jj
+conn system/1234
+alter user tom
+	account unlock;
+conn tom/jerry
+conn tom/jerry
+conn tom/jerry
+conn tom/jerry
+conn system/1234
+select * from dba_profiles order by PROFILE;	
+--커널의 자원은 파라미터 값을 변경해야 적용됨
+alter system set resource_limit=true;
+conn tom/jerry
+--프로파일의 수정
+conn system/1234
+alter profile pro1 limit
+	IDLE_TIME 5
+	FAILED_LOGIN_ATTEMPTS 5;
+select * from dba_profiles order by PROFILE;
+--PASSWORD_VERIFY_FUNCTION 
+--utlpwdmg.*
+conn /as sysdba
+alter profile pro1 limit
+	PASSWORD_VERIFY_FUNCTION f1;
+alter user tom
+	identified by tom;
+alter user tom
+	identified by welcome;	
+alter user tom
+	identified by mot;
+alter user tom
+	profile default;
+--프로파일의 삭제
+drop profile pro1;
+==사용자
+create user 사용자명
+	identified by 암호
+	[default tablespace 테이블스페이스명]
+	[profile 프로파일명]	
+	[account {lock|unlock}]
+	[quota 크기 on 테이블스페이스명 ]
+create user pink
+	identified by blue;
+grant connect,resource to pink;
+conn pink/blue
+select * from tab;
+conn system/1234
+--사용자 삭제
+drop user pink;
+drop user tom;  --X
+drop user tom CASCADE;	
+==DCL:Data Control Language
+db내에서 특정작업을 할수 있는 권한을 부여하고 회수하는 기능
+grant : 권한부여
+revoke :권한회수
+권한- 시스템권한(오라클 서버에 영향을 주는 권한),
+	객체권한(특정 객체(테이블,인덱스등)에 영향을 주는 권한)
+--시스템권한의 확인
+conn system/1234
+select * from system_privilege_map;
+create user u1
+	identified by p1;
+create user u2
+	identified by p2;	
+create user u3
+	identified by p3;
+conn u1/p1
+conn system/1234
+--권한부여
+grant 권한1,권한2,... to 사용자명 [with admin option]
+grant create session,create table to u1;
+grant create session,create table to u2 
+	with admin option;
+conn u1/p1
+create table t1 (
+a number,
+b varchar2(10),
+c date);   --시스템테이블스페이스에 권한없음
+conn system/1234
+alter user u1 default tablespace winter;
+alter user u2 default tablespace winter;
+alter user u3 default tablespace winter;
+conn u1/p1
+create table t1 (
+a number,
+b varchar2(10),
+c date); 
+conn system/1234
+alter user u1
+	quota unlimited on winter;
+alter user u2
+	quota unlimited on winter;	
+alter user u3
+	quota unlimited on winter;	
+
+conn u1/p1
+create table t1 (
+a number,
+b varchar2(10),
+c date); 	
+grant create session,create table to u3;   --X
+
+conn u2/p2
+create table t2 (
+a number,
+b varchar2(10),
+c date);
+grant create session,create table to u3;	
+
+conn u3/p3
+create table t3 (
+a number,
+b varchar2(10),
+c date);
+--권한제거
+conn system/1234
+revoke create session,create table from u1,u2;
+conn u3/p3
+conn u2/p2
+
+
+
+	
+	
+	
+	
+
+
+
+
+
+
+
+--상담
+
+
+
+
+
+
+
+
+
+

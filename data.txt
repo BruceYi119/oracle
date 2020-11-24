@@ -1,0 +1,192 @@
+--테이블 삭제하기
+drop table gogek;
+drop table sawon;
+drop table dept;
+drop table personnel;
+drop table division;
+drop table PAYGRADE;
+drop table bonus;
+drop table student;
+drop table part;
+drop table score;
+drop table tech;
+--날짜형식변경
+alter session 
+	set nls_date_format='yyyy-mm-dd';
+--테이블 생성및 데이터 입력
+create table dept(
+deptno number(3),
+dname varchar2(10),
+loc varchar2(10)
+);
+insert into dept values(10,'총무부','서울');
+insert into dept values(20,'영업부','대전');
+insert into dept values(30,'전산부','부산');
+insert into dept values(40,'관리부','광주');
+
+create table sawon(
+sabun number(3),
+saname varchar2(10) not null,
+deptno number(3),
+sajob varchar2(10),
+sapay number(10),
+sahire date default sysdate,
+sasex varchar2(10),
+samgr number(3)
+);
+insert into sawon values(1,'홍길동',10,'회장',5000,'1980-01-01','남자',null);
+insert into sawon values(2,'한국남',20,'부장',3000,'1988-01-01','남자',1);
+insert into sawon values(3,'이순신',20,'과장',3500,'1985-03-01','남자',2);
+insert into sawon values(5,'이순라',20,'사원',1200,'1990-05-01','여자',3);
+insert into sawon values(7,'놀기만',20,'과장',2300,'1996-06-01','여자',2);
+insert into sawon values(11,'류별나',20,'사원',1600,'1989-12-01','여자',2);
+insert into sawon values(14,'채시라',20,'부장',3400,'1993-10-01','여자',3);
+insert into sawon values(17,'이성계',30,'부장',2800,'1984-05-01','남자',1);
+insert into sawon values(13,'무궁화',10,'부장',3000,'1996-11-01','여자',1);
+insert into sawon values(19,'임꺽정',20,'사원',2200,'1988-05-01','남자',1);
+insert into sawon values(20,'깨똥이',10,'과장',4500,'1990-05-01','남자',13);
+insert into sawon values(6,'공부만',30,'과장',4003,'1995-06-01','남자',17);
+insert into sawon values(8,'채송화',30,'대리',1703,'1992-10-01','여자',17);
+insert into sawon values(12,'류명한',10,'대리',1800,'1990-05-01','남자',20);
+insert into sawon values(9,'무궁화',10,'과장',4003,'1995-04-01','남자',17);
+insert into sawon values(4,'이미라',30,'대리',2503,'1983-08-01','여자',17);
+insert into sawon values(10,'공부해',30,'사원',1303,'1988-11-01','남자',4);
+insert into sawon values(15,'최진실',10,'사원',2000,'1991-04-01','여자',12);
+insert into sawon values(16,'김유신',30,'사원',400,'1981-04-01','남자',4);
+insert into sawon values(18,'강감찬',30,'사원',1003,'1986-07-01','남자',4);
+
+create table gogek(
+gobun number(3),
+goname varchar2(10),
+gotel varchar2(20),
+gojumin varchar2(14),
+godam number(3)
+);
+insert into gogek values(1,'류민','123-1234','700113-1537915',3);
+insert into gogek values(2,'강민','343-1454','690216-1627914',2);
+insert into gogek values(3,'영희','144-1655','750320-2636215',null);
+insert into gogek values(4,'철이','673-1674','770430-1234567',4);
+insert into gogek values(5,'류완','123-1674','720521-1123675',3);
+insert into gogek values(6,'캔디','673-1764','650725-2534566',null);
+insert into gogek values(7,'똘이','176-7677','630608-1648614',7);
+insert into gogek values(8,'쇠돌','673-6774','800804-1346574',9);
+insert into gogek values(9,'홍이','767-1234','731225-1234689',13);
+insert into gogek values(10,'안나','767-1677','751015-2432168',4);
+
+--personnel table 만들기 
+create table personnel( 
+pno number, 
+pname varchar2(15), 
+job varchar2(20), 
+manager number, 
+startdate date, 
+pay number, 
+bonus number, 
+dno number
+); 
+--division table 만들기 
+create table division ( 
+dno number, 
+dname varchar2(20), 
+phone varchar2(20), 
+position varchar2(10) 
+); 
+--paygrade table 만들기 
+create table paygrade 
+( 
+grade number, 
+lowpay number, 
+highpay number 
+); 
+--bonus table 만들기 
+create table bonus ( 
+pname varchar2(15), 
+job varchar2(20), 
+pay number, 
+bonus number 
+); 
+
+--INSERT DIVISION 
+INSERT INTO DIVISION VALUES(10,'FINANCE','032-277-0411','INCHON'); 
+INSERT INTO DIVISION VALUES(20,'RESEARCH','061-535-1212','BUSAN'); 
+INSERT INTO DIVISION VALUES(30,'SALES','02-555-4985','SEOUL'); 
+INSERT INTO DIVISION VALUES(40,'MARKETING','031-284-3800','SUWON'); 
+--INSERT PAYGRADE 
+INSERT INTO PAYGRADE VALUES(1,500,1500); 
+INSERT INTO PAYGRADE VALUES(2,1501,2500); 
+INSERT INTO PAYGRADE VALUES(3,2501,3500); 
+INSERT INTO PAYGRADE VALUES(4,3501,4500); 
+INSERT INTO PAYGRADE VALUES(5,4501,5500); 
+INSERT INTO PAYGRADE VALUES(6,5501,9999); 
+--insert personnel 
+insert into personnel values(1111,'SMITH','MANAGER',1001,'1990-12-17',1000,NULL,10); 
+insert into personnel values(1112,'ALLY','SALESMAN',1116,'1991-02-20',1600,500,30); 
+insert into personnel values(1113,'WORD','SALESMAN',1116,'1992-02-24',1450,300,30); 
+insert into personnel values(1114,'JAMES','MANAGER',1001,'1990-04-12',3975,NULL,20); 
+insert into personnel values(1001,'BILL','PRESIDENT',NULL,'1989-01-10',7000,NULL,10); 
+insert into personnel values(1116,'JOHNSON','MANAGER',1001,'1991-05-01',3550,NULL,30); 
+insert into personnel values(1118,'MARTIN','ANALYST',1111,'1991-09-09',3450,NULL,10); 
+insert into personnel values(1121,'KIM','CLEARK',1114,'1990-12-08',4000,NULL,20); 
+insert into personnel values(1123,'LEE','SALESMAN',1116,'1991-09-23',1200,0,30); 
+insert into personnel values(1123,'PARK','ANALYST',1111,'1990-01-03',2500,NULL,10); 
+create table student (
+ bunho varchar2(10) primary key,
+ irum varchar2(20),
+ juso varchar2(50),
+ school varchar2(20),
+ partcd varchar2(2)
+);
+create table score (
+ bunho varchar2(10) primary key,
+ s1 number,
+ s2 number
+);
+create table tech(
+ bunho varchar2(10) primary key,
+ s3 number,
+ s4 number
+);
+create table part(
+ partcd varchar2(2) primary key,
+ partname varchar2(20)
+);
+insert into student values ('2003120001','강감찬','경기도','백제고','11');
+insert into student values ('2003120002','산만해','강원도','강원','13');
+insert into student values ('2003120003','김희선','경기도','서울여고','12');
+insert into student values ('2003120004','최부자','충남','서여고','11');
+insert into student values ('2003120005','최박수','충북','서울','13');
+insert into student values ('2003120006','강영실','경기도','고구려','11');
+insert into student values ('2003120007','소찬휘','강원도','한라','14');
+insert into student values ('2003120008','김주희','서울','한성','12');
+insert into student values ('2003120009','박두열','서울','남고','15');
+insert into student values ('2003120010','박문수','경기도','고구려','11');
+insert into score values('2003120001',90,80);
+insert into score values('2003120002',50,78);
+insert into score values('2003120003',77,96);
+insert into score values('2003120004',88,88);
+insert into score values('2003120005',95,80);
+insert into score values('2003120006',69,50);
+insert into score values('2003120007',87,82);
+insert into score values('2003120008',75,96);
+insert into score values('2003120009',98,92);
+insert into score values('2003120010',90,95);
+insert into tech values('2003120001',88,95);
+insert into tech values('2003120002',70,78);
+insert into tech values('2003120003',69,88);
+insert into tech values('2003120004',79,55);
+insert into tech values('2003120005',85,68);
+insert into tech values('2003120006',90,89);
+insert into tech values('2003120007',66,78);
+insert into tech values('2003120008',77,89);
+insert into tech values('2003120009',88,95);
+insert into tech values('2003120010',95,90);
+insert into part values('11','컴퓨터공학과');
+insert into part values('12','가정관리학과');
+insert into part values('13','수학과');
+insert into part values('14','국어국문학과');
+insert into part values('15','원예학과');
+insert into part values('16','음악과');
+insert into part values('17','법학과');
+insert into part values('18','정보통계학과');
+insert into part values('19','체육학과');
+commit;   

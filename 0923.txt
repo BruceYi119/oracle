@@ -1,0 +1,253 @@
+==table
+select * from tab;
+
+create table jusorok(
+	no number(3),
+	irum varchar2(30),
+	tel varchar2(20)
+);
+desc jusorok;
+--컬럼추가
+alter table jusorok
+	add (addr varchar2(50));
+desc jusorok;
+--컬럼명 변경
+alter table jusorok
+	rename column tel to hp;
+desc jusorok;
+--컬럼길이변경
+alter table jusorok
+	modify (addr varchar2(100));
+desc jusorok
+--이메일추가
+alter table jusorok
+	add (email varchar2(50));
+desc jusorok	
+--컬럼삭제
+alter table jusorok
+	drop column addr;
+desc jusorok	
+--테이블명변경
+rename jusorok to member;
+select * from tab;
+desc member;
+--테이블 삭제
+drop table member;
+drop table t1;
+drop table t2;
+select * from tab;
+--휴지통 비우기
+purge recyclebin;
+--테이블생성 및 제약조건
+conn tom/jerry
+select * from tab;
+create table hobby(
+	hno number,    --취미번호
+	hname varchar2(30)   --취미이름
+);
+select * from tab;
+insert into hobby values (10,'농구');
+insert into hobby values (10,'배구');
+insert into hobby (hname) values ('축구');
+select * from hobby;
+--제약사항-------------------------------
+primary key :중복X, null X
+unique      :중복X
+check       :지정된 값만 사용
+foreign key :다른테이블의 데이터를 참조
+not null    :필수입력
+----------------------------------------
+drop table hobby;
+--create table 테이블명 (
+--  컬럼명1 데이터형 [제약사항][,
+--	컬럼명2 데이터형 [제약사항]
+--	...]
+--)
+--[tablespace 테이블스페이스명];
+create table hobby(
+	hno number primary key,    
+	hname varchar2(30)  
+);
+insert into hobby values (10,'농구');
+insert into hobby values (10,'배구');   --X
+insert into hobby (hname) values ('축구');
+select * from hobby;
+alter table hobby
+	add (manager varchar2(20) unique);
+alter table hobby	
+	add (loc varchar2(20) not null);   --X 기존 데이터에 어긋남
+desc hobby;
+insert into hobby values (20,'배구',null);	
+insert into hobby values (30,'축구','축구장');	
+insert into hobby values (40,'족구','축구장');	 --X 유니크제약은 중복안됨
+create table sawon(
+	sno number(2) primary key,
+	sname varchar2(30) not null,
+	gender varchar2(10) check (gender in ('남','여')),
+	timesal number check (timesal > 8590),
+	hno number
+);
+insert into sawon (sno,sname) values (1,'둘리');
+insert into sawon (sno,sname,gender) values (2,'고길동','남');
+insert into sawon (sno,gender) values (3,'여');--X
+insert into sawon (sno,sname,gender,timesal) 
+	values (3,'희동이','여',9000);
+select * from sawon;
+insert into sawon values (4,'강가딘','남',9000,10);
+insert into sawon values (5,'우기명','남',9100,50);
+select * from hobby;
+delete hobby where hno=10;
+select * from hobby;
+drop table hobby;
+drop table sawon;
+create table hobby(
+hno number primary key,
+hname varchar2(30) not null,
+manager varchar2(30) unique
+);
+create table sawon(
+sno number(2) primary key,
+sname varchar2(30) not null,
+sal number check (sal>1000),
+city varchar2(10) default '서울',
+hp varchar2(20) unique,
+hno number(2) references hobby(hno));
+insert into hobby values (10,'등산','김등산');
+insert into hobby values (20,'낚시','이낚시');
+insert into hobby values (30,'운동','박운동');
+insert into sawon (sno,sname,sal,hno) 
+	values (1,'김사원',2000,10);
+insert into sawon (sno,sname,sal,hno) 
+	values (2,'이사원',2000,10);	
+select * from sawon;
+insert into sawon values (3,'박사원',2000,'마산','111',30);	
+insert into sawon values (4,'최사원',2000,'마산','222',50);	 --X
+select * from sawon;
+delete hobby where hno=20;
+select * from hobby;
+delete hobby where hno=10;   --X(자식레코드 발견)
+drop table sawon;   --자식테이블 삭제후
+drop table hobby;   --부모테이블 삭제
+purge recyclebin;
+--create table 테이블명 (
+--  컬럼명1 데이터형 [[constraint 제약명] 제약사항][,
+--	컬럼명2 데이터형 [[constraint 제약명] 제약사항]
+--	...]
+--);
+--제약명:테이블명_컬럼명_제약종류(p,u,n,f,c)
+--컬럼레벨제약
+create table hobby(
+hno number(20) constraint hobby_hno_p primary key,
+hname varchar2(30) constraint hobby_hname_n not null,
+mgr varchar2(30)  
+);
+insert into hobby values (null,'농구','이농구');  --X
+insert into hobby values (10,'농구','이농구');
+insert into hobby values (10,'배구','이배구');--X
+insert into hobby values (20,'배구','이배구');	
+create table sawon(
+sno number primary key,
+sname varchar2(30) constraint sawon_sname_n not null,
+hp varchar2(20) constraint sawon_hp_u unique,
+sal number constraint sawon_sal_c check (sal >1000),
+city varchar2(10) default '대전',
+hno number(20) 
+	constraint sawon_hno_f references hobby(hno)
+);	
+--현재 사용자의 제약사항 조회
+select table_name from dictionary 
+	where table_name like '%CONSTRAINT%';
+select table_name from dictionary 
+	where table_name like '%CONS%';	
+desc USER_CONSTRAINTS
+select CONSTRAINT_NAME,CONSTRAINT_TYPE,TABLE_NAME,
+	SEARCH_CONDITION from user_constraints;
+	
+col CONSTRAINT_NAME format a15
+col SEARCH_CONDITION format a20
+col table_name format a20
+/
+--제약의 삭제
+alter table sawon 
+	drop constraint sawon_sal_c;
+alter table sawon
+	drop constraint SYS_C007028;
+alter table sawon
+	drop constraint sawon_hno_f;
+alter table hobby
+	drop primary key;
+drop table sawon;
+drop table hobby;
+--테이블레벨제약	
+create table hobby(
+	hno number,
+	hname varchar2(30),
+	mgr varchar2(30),
+	constraint hobby_hno_p primary key(hno),
+	constraint hobby_hname_u unique(hname)
+);
+create table sawon (
+sno number,
+sname varchar2(30) constraint sawon_sname_n not null,
+sal number,
+city varchar2(10) default '강릉',
+hp varchar2(20),
+hno number,
+constraint sawon_sno_p primary key(sno),
+--constraint sawon_sname_n not null, not null제약은 컬럼레벨만 가능--
+constraint sawon_sal_c check (sal>1000),
+constraint sawon_hno_f foreign key(hno) references hobby(hno)
+);
+--컬럼레벨로 361page 1번
+create table dept2(
+deptno varchar2(6) constraint dept2_deptno_p primary key,
+dname varchar2(30)
+);
+create table tcons (
+no number(5) constraint tcons_no_pk primary key,
+name varchar2(20) constraint tcons_name_nn not null,
+jumin varchar2(13) constraint tcons_jumin_nn not null,
+area number(1) constraint tcons_area_ck 
+	check (area>=1 and area<=4 ),
+deptno varchar2(6) references dept2(deptno),
+constraint tcons_jumin_uk unique(jumin)
+);
+--if)유니크제약 추가시
+alter table tcons
+	add constraint tcons_jumin_uk unique(jumin);
+--복합키
+create table student(
+grade varchar2(2),
+ban varchar2(2),
+bunho varchar2(2),
+irum varchar2(20),
+hp varchar2(20),
+constraint student_grade_ban_bunho_p primary key(grade,ban,bunho)
+);
+insert into student values('1','1','1','홍길동','111');
+insert into student values('1','1','2','콩쥐','222');
+insert into student values('1','1','3','팥쥐','333');
+insert into student values('2','1','1','장화','444');
+insert into student values('2','1','2','홍련','555');
+insert into student values('2','1','3','심청','666');
+select * from student;
+insert into student values('1','1','3','둘리','777');
+===
+1.영구테이블 스페이스 september 생성 -데이터 파일 september01.DBF (10M)
+2.september에 데이터 파일 추가 -데이터 파일 september02.DBF (10M)자동확장모드 100KB단위,최대 50M
+3.데이터닉션너리에서 정보를 표시
+4.september테이블 스페이스를 d:\down소로 이동
+5.사용자 keyboard/mouse 생성하여 권한부여, 기본테이블스페이스 september
+6.september 테이블 스페이스에 data.txt 수행
+7.septemberG 테이블 스페이스및 연관된 파일 삭제후 결과 확인
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,134 @@
+m561-709-50
+--숫자2개 입력받아 합 출력
+--사원번호를 입력받아 그 사원의 보너스를 계산하여 보너스를 변경하시오
+급여가 1000이하 =>급여의 10%
+급여가 1001-2000 =>급여의 15%
+급여가 2001-3000 =>급여의 20%
+급여가 3001이상 =>급여의 25%
+==커서 :sql문을 실행할때 마다 처리를 위한 메모리 공간,
+      객체가 아니라 정의하는 것, 
+	  2건이상의 데이터를 pl/sql로 가져올시 반드시 명시적 커서사용  
+묵시적 커서 : 오라클이 자동으로 생성, 묵시적 커서에 저장되는 데이터는 1행만 가능
+명시적 커서 : 사용자가 선언하여 사용하고 사용이 끝난후 정리작업
+--명시적커서의 속성
+커서명%isopen : 열려있다.
+커서명%notfound :행이 없다
+커서명%found :행이 있다
+커서명%rowcount :처리된 행수
+--묵시적커서의 속성
+sql%isopen : 열려있다.
+sql%notfound :행이 없다
+sql%found :행이 있다
+sql%rowcount :처리된 행수
+--형식1)
+declare
+cursor 커서명 is select 절;
+begin
+open 커서명;   --1.커서열기
+loop
+	fetch 커서명 into 변수 ;  --2.커서로부터 값을 가져와 변수에 할당
+		반복할 명령;
+end loop;
+close 커서명;
+end;
+/   
+--이름,급여,직책 출력
+--퍼스널테이블에서 이름,급여,입사일, 근무기간,급여순위를 구하여 personnel_r테이블에 삽입
+create table personnel_r(
+pname varchar2(20),
+pay number,
+startdate date,
+gigan varchar2(30),
+rank number(3)
+);
+--형식2)
+declare
+cursor 커서명 is select 절;
+begin
+for 변수 in 커서명 loop
+	반복할 명령;
+end loop;
+end;
+/  
+--사원의 보너스를 계산하여 이름,급여,보너스를 출력하시오
+--case문
+case [조건]
+	when 조건1 then 실행1
+	when 조건2 then 실행2	
+	...
+	[else 실행]
+end case;
+급여가 1000이하 =>급여의 10%
+급여가 1001-2000 =>급여의 15%
+급여가 2001-3000 =>급여의 20%
+급여가 3001이상 =>급여의 25%
+--
+create table sung(
+name varchar2(20),
+kor number(3),
+eng number(3),
+mat number(3)
+);
+insert into sung values ('둘리',90,88,94);
+insert into sung values ('심슨',80,68,74);
+insert into sung values ('희동이',100,98,95);
+insert into sung values ('고길동',60,58,75);
+insert into sung values ('강가딘',80,88,77);
+create table result(
+name varchar2(20),
+kor number(3),
+eng number(3),
+mat number(3),
+ave number(6,2),     --평균
+hap number(3),       --총점  
+grd varchar2(10)     --수우미양가
+);
+--sung테이블의 데이터를 읽어 result 테이블에 데이터를 삽입
+--예외 : pl/sql이 실행되는 동안 발생되는 에러, 런타임에러
+       오라클예외와 사용자정의 예외
+형식)
+declare
+
+begin
+
+exception
+	when 예외이름1 then
+		처리내용1
+	[when 예외이름2 then
+		처리내용2]
+		...
+	[when others then  --위에 정의된 예외에 속하지 않는 기타예외
+		처리내용]		
+end;
+/	   
+--사원번호를 입력받아 이름과 급여출력
+	   
+	   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

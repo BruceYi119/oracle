@@ -1,0 +1,231 @@
+select * from student;  --접수번호,이름,주소,출신학교,학과코드
+select * from score;    --접수번호,수능점수,내신점수
+select * from tech;     --접수번호, 면접점수,체력장
+select * from part;     --학과코드,학과명
+desc part
+desc student
+--접수번호,이름,수능점수,내신점수,면접점수,체력장
+select student.bunho,irum,s1,s2,s3,s4 
+	from student,score,tech
+	where student.bunho=score.bunho and student.bunho=tech.bunho;
+--접수번호,이름,수능점수,내신점수,면접점수,체력장,합계
+select st.bunho,irum,s1,s2,s3,s4,s1+s2+s3+s4 total 
+	from student st,score sc,tech t
+	where st.bunho=sc.bunho and st.bunho=t.bunho;
+--접수번호,이름,학과명,수능점수,내신점수,면접점수,체력장,합계
+select st.bunho,irum,partname,s1,s2,s3,s4,s1+s2+s3+s4 total 
+	from student st, score sc, tech t, part p 
+	where st.bunho=sc.bunho and st.bunho=t.bunho and
+		st.partcd=p.partcd;
+==>join ~ on 구문으로
+--접수번호,이름,출신학교,학과명
+select bunho,irum,school,partname 
+	from student s , part p
+	where s.partcd=p.partcd;
+-->	join ~ on
+select bunho,irum,school,partname 
+	from student s join part p 
+	on s.partcd=p.partcd;	
+
+--접수번호,이름,수능점수,내신점수,면접점수,체력장
+select student.bunho,irum,s1,s2,s3,s4 
+	from student,score,tech
+	where student.bunho=score.bunho and student.bunho=tech.bunho;
+-->	join ~ on
+select student.bunho,irum,s1,s2,s3,s4 
+	from student join score on student.bunho=score.bunho
+				 join tech on student.bunho=tech.bunho;
+--접수번호,이름,학과명,수능점수,내신점수,면접점수,체력장,합계
+select st.bunho,irum,partname,s1,s2,s3,s4,s1+s2+s3+s4 total 
+	from student st, score sc, tech t, part p 
+	where st.bunho=sc.bunho and st.bunho=t.bunho and
+		st.partcd=p.partcd;
+-->	join ~ on
+select st.bunho,irum,partname,s1,s2,s3,s4,s1+s2+s3+s4 total 
+	from student st join score sc on st.bunho=sc.bunho
+					join tech t on st.bunho=t.bunho
+					join part p on st.partcd=p.partcd;		
+--퍼스널테이블과 디비젼테이블을 이용하여 이름,업무,부서명,입사일 출력
+desc personnel
+desc division		
+select pname,job,dname,startdate 
+	from personnel p, division d
+	where p.dno=d.dno;
+--using구문
+select pname,job,dname,startdate 
+	from personnel p join division d using(dno);
+--Non Equi조인
+select * from paygrade;
+personnel, paygrade 테이블을 이용하여 사번,이름,급여,급여등급 출력
+select pno,pname,pay,grade from personnel,paygrade
+	where pay between lowpay and highpay;
+--self 조인(사번,이름,업무,급여,관리자명)
+select * from personnel;
+col job format a10
+col pname format a10	
+select * from personnel;
+select p1.pno,p1.pname,p1.job,p1.pay,p2.pname 매니져명
+	from personnel p1,personnel p2
+	where p1.manager=p2.pno;
+--outer조인
+insert into sawon (sabun,saname) values (100,'콩쥐');
+insert into sawon (sabun,saname) values (101,'팥쥐');
+select * from sawon;
+insert into dept values (91,'이벤트','서산');
+select * from dept;
+--사번,이름,급여,부서명 
+select sabun,saname,sapay,dname 
+	from sawon,dept 
+	where sawon.deptno=dept.deptno;
+select sabun,saname,sapay,dname 
+	from sawon,dept 
+	where sawon.deptno=dept.deptno(+);	
+select sabun,saname,sapay,dname 
+	from sawon,dept 
+	where sawon.deptno(+)=dept.deptno;	
+select sabun,saname,sapay,dname 
+	from sawon,dept 
+	where sawon.deptno(+)=dept.deptno(+);	    X
+select sabun,saname,sapay,dname 
+	from sawon left outer join dept on sawon.deptno=dept.deptno;
+select sabun,saname,sapay,dname 
+	from sawon right outer join dept on sawon.deptno=dept.deptno;
+select sabun,saname,sapay,dname 
+	from sawon full outer join dept on sawon.deptno=dept.deptno;
+--서브쿼리
+select * from student;
+김희선과 같은 동네 사는 사람의 이름,출신학교,주소 출력
+select juso from student where irum='김희선';
+select irum,school,juso from student
+	where juso=(select juso from student where irum='김희선');
+--퍼스널테이블에서 워드보다 급여를 많이 받는 사람의 이름,직책,급여 출력
+select pay from personnel where pname='WORD';
+select pname,job,pay from personnel
+	where pay>(select pay from personnel where pname='WORD');
+--제임스랑 같은 직책인 사람의 이름,직책,급여 출력	
+select job from personnel where pname='JAMES';
+select pname,job,pay from personnel
+	where job=(select job from personnel where pname='JAMES');
+--30번 부서의 급여보다 많이 받는 사람의 이름,직책,급여,부서번호 출력	
+select pay from personnel where dno=30;
+--1600,1450,3550,1200
+select pname,job,pay,dno from personnel
+	where pay>(select pay from personnel where dno=30);  X
+select pname,job,pay,dno from personnel
+	where pay>all(select pay from personnel where dno=30);
+select pname,job,pay,dno from personnel
+	where pay>any(select pay from personnel where dno=30);
+--30번 부서의 급여보다 많이 받는 사람의 이름,직책,급여,부서번호 출력(단,30번부서제외)	
+select pname,job,pay,dno from personnel
+	where pay>any(select pay from personnel where dno=30)
+		and dno<>30;
+--30번 부서의 업무와 같은 일을 하는 사람의 이름,직책,급여,부서번호 출력
+select job from personnel where dno=30;
+select pname,job,pay,dno from personnel
+	where job=(select job from personnel where dno=30);   X
+select pname,job,pay,dno from personnel
+	where job in (select job from personnel where dno=30);
+select pname,job,pay,dno from personnel
+	where job =any (select job from personnel where dno=30);
+--직원의 평균급여보다 많이 받는 사람의 이름,직책,급여,부서번호 출력
+select avg(pay) from personnel;
+select pname,job,pay,dno from personnel
+	where pay>(select avg(pay) from personnel);
+==DML(데이터 조작언어):입력,수정,삭제처럼 데이터에 변형을 주거나 조회하는 명령어	
+==입력
+desc personnel;
+insert into 테이블명 [(컬럼명1,컬럼명2,...)] values (값1,값2,...)
+insert into personnel (pno,pname,pay) values (9999,'둘리',100);
+insert into personnel (pno,pname,startdate,pay)
+	values (8888,'희동이','2020/09/16',10);
+select * from personnel;
+insert into personnel 
+	values (7777,'고길동','부장',1111,sysdate,4000,null,20)	;
+select * from personnel;	
+insert into personnel 
+	values (5555,'독고탁','야구선수',null,null,9999,null,null);
+select * from personnel;	
+insert into personnel
+	values(4444,'까치','null',1111,null,null,null,null);
+select * from personnel;	
+rollback;
+select * from personnel;
+==수정
+update 테이블명 set 컬럼명1=값1 [,컬럼명2=값2,...] where 조건
+update personnel set job='과장';
+select * from personnel;
+update personnel set job='부장',startdate=sysdate where pay>3000;
+select * from personnel;
+==삭제
+delete from 테이블명 [where 조건 ]
+delete from personnel where dno=30;
+select * from personnel;
+delete from personnel;
+select * from personnel;
+@D:\study\oracle\data.txt
+select * from tab;
+purge recyclebin;
+select * from personnel;
+==다중입력	
+create table p1
+	as
+	select pno,pname,pay from personnel;
+select * from p1;
+create table p2
+	as
+	select pno,pname,pay, pay*0.1 tax from personnel
+			where pay<3000;	
+select * from p2;	
+create table p3
+	as
+	select pno,pname,pay, pay*0.1 tax from personnel
+			where pay<0;	
+select * from p3;	
+desc p3
+create table p4
+	as
+	select pno,pname,pay, pay*0.1 tax from personnel
+			where 1=0;
+desc p4	
+select * from p4;
+
+create table p5
+	as
+	select pno,pname,pay,1 paygrade from personnel
+			where 1=2;
+desc p5	
+select * from p5;
+p11 테이블 생성 -컬럼 사번,이름,급여,세금을 가지고 데이터 없음
+p12 테이블 생성 -컬럼 사번,이름,급여,등급을 가지고 데이터 없음
+create table p11
+	as
+	select pno,pname,pay, pay*0.1 tax from personnel
+			where 1=2;
+create table p12
+	as
+	select pno,pname,pay, 1 grade from personnel
+			where 1=2;
+select * from p11;
+select * from p12;
+--퍼스널테이블의 데이터가 p11,p12에 입력되도록
+insert all
+	into p11 (pno,pname,pay,tax) values (pno,pname,pay,pay*0.1)
+	into p12 (pno,pname,pay,grade) values (pno,pname,pay,1)
+	select pno,pname,pay from personnel;
+select * from p11;
+select * from p12;
+
+--테이블삭제
+drop table 테이블명;
+--상담표 작성후 g0kim@nate.com으로 보내주세요
+
+
+
+
+
+
+
+
+
+
+
